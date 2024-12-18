@@ -33,6 +33,7 @@ public class EnterRegistrationSteps {
         }
     }
 
+    // Public getter for validRegistrations
     public List<String> getValidRegistrations() {
         return validRegistrations;
     }

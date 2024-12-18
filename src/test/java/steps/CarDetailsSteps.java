@@ -5,6 +5,8 @@ import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import pages.CarDetailsPage;
 import utils.FileUtils;
+
+import java.util.List;
 import java.util.Map;
 
 public class CarDetailsSteps {
@@ -14,7 +16,7 @@ public class CarDetailsSteps {
     private Map<String, Map<String, String>> expectedCarDetails;
 
     public CarDetailsSteps() {
-        this.driver = new EnterRegistrationSteps().getDriver();
+        this.driver = new EnterRegistrationSteps().getDriver(); // Reuse driver
         this.carDetailsPage = new CarDetailsPage(driver);
     }
 
@@ -23,19 +25,25 @@ public class CarDetailsSteps {
         expectedCarDetails = FileUtils.readCarDetailsFile("src/test/resources/" + outputFileName);
         Assertions.assertThat(expectedCarDetails).isNotEmpty();
 
-        EnterRegistrationSteps enterRegistrationSteps = new EnterRegistrationSteps();
-        for (String registration : enterRegistrationSteps.getValidRegistrations()) {
+        EnterRegistrationSteps enterSteps = new EnterRegistrationSteps();
+        List<String> validRegistrations = enterSteps.getValidRegistrations();
+
+        for (String registration : validRegistrations) {
+            System.out.println("Validating details for registration: " + registration);
 
             String actualRegistration = carDetailsPage.getRegistration();
             String actualMakeModel = carDetailsPage.getMakeModel();
             String actualYear = carDetailsPage.getYear();
 
             Map<String, String> expectedDetails = expectedCarDetails.get(registration);
-            Assertions.assertThat(expectedDetails).isNotNull();
+            Assertions.assertThat(expectedDetails).as("Expected details not found for registration " + registration).isNotNull();
 
             Assertions.assertThat(actualRegistration).isEqualToIgnoringWhitespace(registration);
             Assertions.assertThat(actualMakeModel).isEqualToIgnoringWhitespace(expectedDetails.get("MAKE_MODEL"));
             Assertions.assertThat(actualYear).isEqualToIgnoringWhitespace(expectedDetails.get("YEAR"));
+
+            System.out.println("Details validated successfully for: " + registration);
         }
+        System.out.println("All registrations validated successfully.");
     }
 }
