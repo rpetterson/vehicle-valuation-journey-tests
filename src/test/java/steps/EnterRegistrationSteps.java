@@ -9,9 +9,11 @@ import utils.FileUtils;
 import java.util.List;
 
 public class EnterRegistrationSteps {
-    private WebDriver driver;
+    public static WebDriver driver; // Static WebDriver instance
     private EnterRegistrationPage enterRegistrationPage;
-    private List<String> validRegistrations;
+
+    // Static list for valid registrations
+    public static List<String> validRegistrations;
 
     @Given("I load valid registrations from {string}")
     public void i_load_valid_registrations(String fileName) {
@@ -33,12 +35,7 @@ public class EnterRegistrationSteps {
         }
     }
 
-    // Public getter for validRegistrations
-    public List<String> getValidRegistrations() {
-        return validRegistrations;
-    }
-
-    public WebDriver getDriver() {
-        return this.driver;
+    public static WebDriver getDriver() {
+        return driver;
     }
 }

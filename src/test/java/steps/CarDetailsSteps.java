@@ -10,40 +10,48 @@ import java.util.List;
 import java.util.Map;
 
 public class CarDetailsSteps {
-
     private WebDriver driver;
     private CarDetailsPage carDetailsPage;
     private Map<String, Map<String, String>> expectedCarDetails;
 
     public CarDetailsSteps() {
-        this.driver = new EnterRegistrationSteps().getDriver(); // Reuse driver
+        this.driver = EnterRegistrationSteps.getDriver(); // Reuse the shared WebDriver instance
         this.carDetailsPage = new CarDetailsPage(driver);
     }
 
     @Then("I should see all car details match the expected values from {string}")
-    public void all_car_details_should_match(String outputFileName) {
+    public void all_car_details_should_match(String outputFileName) throws InterruptedException {
+        Thread.sleep(2000);
         expectedCarDetails = FileUtils.readCarDetailsFile("src/test/resources/" + outputFileName);
         Assertions.assertThat(expectedCarDetails).isNotEmpty();
 
-        EnterRegistrationSteps enterSteps = new EnterRegistrationSteps();
-        List<String> validRegistrations = enterSteps.getValidRegistrations();
+        List<String> validRegistrations = EnterRegistrationSteps.validRegistrations;
 
         for (String registration : validRegistrations) {
             System.out.println("Validating details for registration: " + registration);
 
+            // Actual values
             String actualRegistration = carDetailsPage.getRegistration();
             String actualMakeModel = carDetailsPage.getMakeModel();
             String actualYear = carDetailsPage.getYear();
 
+            // Expected values
             Map<String, String> expectedDetails = expectedCarDetails.get(registration);
-            Assertions.assertThat(expectedDetails).as("Expected details not found for registration " + registration).isNotNull();
+            Assertions.assertThat(expectedDetails)
+                    .as("Expected details not found for registration " + registration)
+                    .isNotNull();
 
+            String expectedMakeModel = expectedDetails.get("MAKE_MODEL");
+            String expectedYear = expectedDetails.get("YEAR");
+
+            // Perform assertions
             Assertions.assertThat(actualRegistration).isEqualToIgnoringWhitespace(registration);
-            Assertions.assertThat(actualMakeModel).isEqualToIgnoringWhitespace(expectedDetails.get("MAKE_MODEL"));
-            Assertions.assertThat(actualYear).isEqualToIgnoringWhitespace(expectedDetails.get("YEAR"));
+            Assertions.assertThat(actualMakeModel).isEqualToIgnoringWhitespace(expectedMakeModel);
+            Assertions.assertThat(actualYear).isEqualToIgnoringWhitespace(expectedYear);
 
             System.out.println("Details validated successfully for: " + registration);
         }
+
         System.out.println("All registrations validated successfully.");
     }
 }
