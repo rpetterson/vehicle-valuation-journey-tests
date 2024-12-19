@@ -29,7 +29,7 @@ public class EnterRegistrationPage {
 
     public void clickValueYourCar() throws InterruptedException {
         driver.findElement(valueCarButton).click();
-        Thread.sleep(10000);
+        Thread.sleep(2000);
     }
 
     // Method to check if error message is displayed

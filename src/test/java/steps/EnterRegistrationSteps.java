@@ -44,7 +44,7 @@ public class EnterRegistrationSteps {
 
     private void closeDriver() {
         if (driver != null) {
-            driver.quit();
+           // driver.quit();
         }
     }
 
@@ -73,9 +73,12 @@ public class EnterRegistrationSteps {
         System.out.println("Error message displayed for invalid registration: " + registration);
 
         // Assert the error message is correct
+        String actualErrorMessage = enterRegistrationPage.getErrorMessage();
         String expectedErrorMessage = "We couldn’t find a vehicle with that registration. Enter a valid UK reg. Recent registrations take a few days to appear on our system.";
-        Assertions.assertThat(enterRegistrationPage.getErrorMessage())
+
+        Assertions.assertThat(actualErrorMessage.trim())
                 .contains(expectedErrorMessage);
+
 
         // Clear the input field for the next registration
         enterRegistrationPage.clearRegistrationField();
@@ -93,8 +96,9 @@ public class EnterRegistrationSteps {
         System.out.println("Actual Registration: " + actualRegistration);
 
         // Assertion to validate registration matches
-        Assertions.assertThat(actualRegistration)
-                .isEqualToIgnoringWhitespace(registration);
+        Assertions.assertThat(actualRegistration.replaceAll("\\s", ""))
+                .isEqualToIgnoringWhitespace(registration.replaceAll("\\s", ""));
+
 
         System.out.println("Valid registration processed successfully: " + registration);
     }

@@ -41,9 +41,11 @@ public class CarDetailsSteps {
 
             // Expected values
             Map<String, String> expectedDetails = expectedCarDetails.get(registration);
+            System.out.println("XXXXXXXXX expected all details" + expectedDetails);
             Assertions.assertThat(expectedDetails)
                     .as("Expected details not found for registration " + registration)
                     .isNotNull();
+
 
             String expectedMakeModel = expectedDetails.get("MAKE_MODEL");
             String expectedYear = expectedDetails.get("YEAR");
