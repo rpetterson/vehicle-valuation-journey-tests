@@ -32,6 +32,10 @@ public class CarDetailsSteps {
 
             // Actual values
             String actualRegistration = carDetailsPage.getRegistration();
+            Assertions.assertThat(actualRegistration.trim())
+                    .isEqualToIgnoringWhitespace(registration.trim());
+
+
             String actualMakeModel = carDetailsPage.getMakeModel();
             String actualYear = carDetailsPage.getYear();
 
