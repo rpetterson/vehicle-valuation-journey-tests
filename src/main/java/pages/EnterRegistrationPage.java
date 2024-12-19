@@ -1,6 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 
 public class EnterRegistrationPage {
@@ -9,6 +10,9 @@ public class EnterRegistrationPage {
 
     private By registrationInput = By.id("vrm-input");
     private By valueCarButton = By.cssSelector("button[type='submit']");
+
+    private By errorMessageLocator = By.cssSelector("div.InfoBox-module__infoBox-JXzH.InfoBox-module__error-sQpY");
+
 
     public EnterRegistrationPage(WebDriver driver) {
         this.driver = driver;
@@ -19,10 +23,31 @@ public class EnterRegistrationPage {
     }
 
     public void enterRegistration(String registration) {
+        driver.findElement(registrationInput).clear();
         driver.findElement(registrationInput).sendKeys(registration);
     }
 
-    public void clickValueYourCar() {
+    public void clickValueYourCar() throws InterruptedException {
         driver.findElement(valueCarButton).click();
+        Thread.sleep(10000);
+    }
+
+    // Method to check if error message is displayed
+    public boolean isErrorMessageDisplayed() {
+        try {
+            return driver.findElement(errorMessageLocator).isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
+
+    // Method to get the error message text
+    public String getErrorMessage() {
+        return driver.findElement(errorMessageLocator).getText().trim();
+    }
+
+    // Method to clear the registration input field
+    public void clearRegistrationField() {
+        driver.findElement(registrationInput).clear();
     }
 }

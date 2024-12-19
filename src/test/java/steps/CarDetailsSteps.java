@@ -44,12 +44,18 @@ public class CarDetailsSteps {
             String expectedMakeModel = expectedDetails.get("MAKE_MODEL");
             String expectedYear = expectedDetails.get("YEAR");
 
+            System.out.println("Actual Value: " + actualRegistration);
+            System.out.println("Expected Value: " + registration);
+
             // Perform assertions
             Assertions.assertThat(actualRegistration).isEqualToIgnoringWhitespace(registration);
             Assertions.assertThat(actualMakeModel).isEqualToIgnoringWhitespace(expectedMakeModel);
             Assertions.assertThat(actualYear).isEqualToIgnoringWhitespace(expectedYear);
 
             System.out.println("Details validated successfully for: " + registration);
+
+            //Go back to Search Page
+            carDetailsPage.goBack();
         }
 
         System.out.println("All registrations validated successfully.");
