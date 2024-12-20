@@ -1,6 +1,7 @@
 package steps;
 
 import io.cucumber.java.en.*;
+import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import pages.CarDetailsPage;
@@ -11,13 +12,15 @@ import org.assertj.core.api.Assertions;
 import java.util.List;
 
 public class EnterRegistrationSteps {
-    private static WebDriver driver; // Static WebDriver instance
+    private WebDriver driver; // Static WebDriver instance
     private EnterRegistrationPage enterRegistrationPage;
     private CarDetailsPage carDetailsPage;
-
     // Static list for valid registrations
     public static List<String> validRegistrations;
-
+    public EnterRegistrationSteps() {
+        // Use the shared driver from Hooks
+        this.driver = Hooks.getDriver();
+    }
     @Given("I load valid registrations from {string}")
     public void i_load_valid_registrations(String fileName) {
         validRegistrations = FileUtils.readValidRegistrations("src/test/resources/" + fileName);
@@ -26,26 +29,14 @@ public class EnterRegistrationSteps {
 
     @When("I enter each valid registration and value the car")
     public void i_enter_each_valid_registration() throws InterruptedException {
-        initializeDriver();
         enterRegistrationPage = new EnterRegistrationPage(driver);
         carDetailsPage = new CarDetailsPage(driver);
 
         for (String registration : validRegistrations) {
-            processRegistration(registration);
+            if(StringUtils.isNotBlank(registration))processRegistration(registration);
         }
 
-        closeDriver();
-    }
 
-    private void initializeDriver() {
-        System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
-        driver = new ChromeDriver();
-    }
-
-    private void closeDriver() {
-        if (driver != null) {
-           // driver.quit();
-        }
     }
 
     private void processRegistration(String registration) throws InterruptedException {
@@ -101,10 +92,5 @@ public class EnterRegistrationSteps {
 
 
         System.out.println("Valid registration processed successfully: " + registration);
-    }
-
-
-    public static WebDriver getDriver() {
-        return driver;
     }
 }
