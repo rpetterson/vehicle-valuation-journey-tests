@@ -7,9 +7,11 @@ public class CarDetailsPage {
     private WebDriver driver;
 
 
-    private By registrationLocator = By.xpath("//*[@id=\"main\"]/div[1]/div[3]/div/div[2]/div/div/div/div[1]/div");
-    private By makeModelLocator = By.xpath("//*[@id=\"main\"]/div[1]/div[3]/div/div[2]/div/div/div/div[1]/h1");
-    private By yearLocator = By.cssSelector("#main > div.Hero__homepageHeroWrapper-tQXt.mileageTransitionStyles > div.Hero__homepageHero-XjVA > div > div:nth-child(2) > div > div > div > div.HeroVehicle__component-Av9f > ul > li:nth-child(1)");
+    private By registrationLocator = By.cssSelector(".HeroVehicle__vrmBadgeContainer-OoPE > .VRM-module__vrm-hdeF[data-thc-badge-regular='true']");
+
+    private By makeModelLocator = By.cssSelector("h1.HeroVehicle__title-FAmG[data-cy='vehicleMakeAndModel']");
+
+    private By yearLocator = By.cssSelector(".HeroVehicle__component-Av9f ul > li:first-child");
 
     private By backLink = By.cssSelector("[data-cy='notMyCar']");
     public CarDetailsPage(WebDriver driver) {

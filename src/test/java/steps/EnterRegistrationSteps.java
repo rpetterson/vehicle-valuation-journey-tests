@@ -3,7 +3,6 @@ package steps;
 import io.cucumber.java.en.*;
 import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import pages.CarDetailsPage;
 import pages.EnterRegistrationPage;
 import utils.FileUtils;
@@ -45,7 +44,6 @@ public class EnterRegistrationSteps {
         enterRegistrationPage.enterRegistration(registration);
         enterRegistrationPage.clickValueYourCar();
 
-        // Wait for the page to load (adjust time as necessary or use WebDriverWait)
         Thread.sleep(3000);
 
         System.out.println("Current URL: " + driver.getCurrentUrl());
@@ -56,22 +54,19 @@ public class EnterRegistrationSteps {
             handleValidRegistration(registration);
         }
 
-        // Add a delay to avoid rate limiting
-        Thread.sleep(3000); // Adjust if necessary
+        // Add a delay to avoid rate limiting on live service
+        Thread.sleep(3000);
     }
 
     private void handleInvalidRegistration(String registration) {
         System.out.println("Error message displayed for invalid registration: " + registration);
 
-        // Assert the error message is correct
         String actualErrorMessage = enterRegistrationPage.getErrorMessage();
         String expectedErrorMessage = "We couldn’t find a vehicle with that registration. Enter a valid UK reg. Recent registrations take a few days to appear on our system.";
 
         Assertions.assertThat(actualErrorMessage.trim())
                 .contains(expectedErrorMessage);
 
-
-        // Clear the input field for the next registration
         enterRegistrationPage.clearRegistrationField();
     }
 

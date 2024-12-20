@@ -41,12 +41,10 @@ public class EnterRegistrationPage {
         }
     }
 
-    // Method to get the error message text
     public String getErrorMessage() {
         return driver.findElement(errorMessageLocator).getText().trim();
     }
 
-    // Method to clear the registration input field
     public void clearRegistrationField() {
         driver.findElement(registrationInput).clear();
     }
